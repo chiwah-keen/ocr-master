@@ -55,3 +55,9 @@ settings = {
 
 FILEPATH = "D:\\datagrand\\pdffiles"
 SUPPORT_CONVERT_TYPE = ["imgpdf2textpdf", "imgpdf2textfile", "img2xml"]
+
+SUPPORT_CONVERT_TYPE_MAP = {
+    "imgpdf2textpdf": ".pdf", 
+    "imgpdf2textfile": ".txt", 
+    "img2xml": ".xml"
+}

@@ -60,7 +60,7 @@ class UploadApiHandler(BaseHandler):
             with open(os.path.join(upload_path, sfile), 'wb') as f:
                 f.write(content)
                 f.flush()
-            self.send_data("/download?f=c_"+sfile)
+            self.send_data("/download?f=c_"+ os.path.splitext(sfile)[0] + config.SUPPORT_CONVERT_TYPE_MAP.get(cvttype,".pdf"))
             self.finish()
         except Exception as e:
             self.log.error(traceback.format_exc())

@@ -6,6 +6,8 @@ import traceback, os, json, os, uuid, time, sys, requests
 curr_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(curr_path, "../conf"))
 import config
+ESCAP_LIST = []
+
 
 def convertImgPdf2TextPdf(sname):
     if not sname.strip().endswith(".pdf"): return False
@@ -44,9 +46,13 @@ def hasConverted(fname):
     return any([f for f in os.listdir(config.FILEPATH) if preFix in f])
 
 def listPreConvertPdfFiles():
+    reload(sys)
     needCvtFiles = []
     for f in os.listdir(config.FILEPATH):
         if f.startswith("c_") or hasConverted(f):continue
+        ctime = os.path.getctime(os.path.join(config.FILEPATH, f)) 
+        if int(time.time()) - int(ctime) > 60 * 60:continue
+        if f in ESCAP_LIST: continue
         if any([cT for cT in config.SUPPORT_CONVERT_TYPE if cT in f]):
             needCvtFiles.append(f)
     return needCvtFiles
@@ -73,6 +79,9 @@ while True:
                 status = convertImgPdf2Text(f)
             if f.startswith("img2xml"):
                 status = convertJpg2Xml(f)
+            if status is False:
+                ESCAP_LIST.append(f)
+                print ESCAP_LIST
             time.sleep(1)
     except Exception as e:
         print traceback.format_exc()
